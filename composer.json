@@ -21,5 +21,10 @@
             "Driebit\\Prepper\\Orm\\": "src/",
             "Driebit\\Prepper\\Orm\\Tests\\": "tests/"
         }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0.x-dev"
+        }
     }    
 }
