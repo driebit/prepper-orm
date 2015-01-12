@@ -2,13 +2,23 @@
 
 namespace Driebit\Prepper\Orm\Cache;
 
+use Doctrine\ORM\EntityManager;
 use Driebit\DbBackup\SqliteCopyBackup;
+use Driebit\Prepper\Cache\AbstractDoctrineCache;
+use Driebit\Prepper\Cache\Store\StoreInterface;
 use Driebit\Prepper\Exception\BackupNotFoundException;
 use Driebit\Prepper\Exception\BackupOutOfDateException;
 use Driebit\Prepper\Fixture\FixtureSet;
 
-class SqliteCopyCache extends AbstractOrmCache
+class SqliteCopyCache extends AbstractDoctrineCache
 {
+    public function __construct(
+        EntityManager $objectManager,
+        StoreInterface $store
+    ) {
+        parent::__construct($objectManager, $store);
+    }
+
     public function store(FixtureSet $fixtures)
     {
         $key = $this->getCacheKey($fixtures);
@@ -46,7 +56,7 @@ class SqliteCopyCache extends AbstractOrmCache
     
     private function getDatabasePath()
     {
-        $params = $this->entityManager->getConnection()->getParams();
+        $params = $this->objectManager->getConnection()->getParams();
 
         return $params['path'];
     }
