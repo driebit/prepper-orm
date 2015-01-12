@@ -1,0 +1,25 @@
+{
+    "name": "driebit/prepper-orm",
+    "type": "library",
+    "description": "Prep your app for running tests with Doctrine ORM",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Driebit",
+            "homepage": "http://www.driebit.nl",
+            "email": "tech@driebit.nl"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.3",
+        "driebit/prepper": "1.0.x-dev",
+        "driebit/db-backup": "1.0.x-dev",
+        "doctrine/orm": "~2.4"
+    },
+    "autoload": {
+        "psr-4": {
+            "Driebit\\Prepper\\Orm\\": "src/",
+            "Driebit\\Prepper\\Orm\\Tests\\": "tests/"
+        }
+    }    
+}
