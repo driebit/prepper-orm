@@ -8,7 +8,7 @@ use Driebit\Prepper\Cache\AbstractDoctrineCache;
 use Driebit\Prepper\Cache\Store\StoreInterface;
 use Driebit\Prepper\Exception\BackupNotFoundException;
 use Driebit\Prepper\Exception\BackupOutOfDateException;
-use Driebit\Prepper\Fixture\FixtureSet;
+use Driebit\Prepper\Fixture\FixtureSetInterface;
 
 class SqliteCopyCache extends AbstractDoctrineCache
 {
@@ -19,32 +19,32 @@ class SqliteCopyCache extends AbstractDoctrineCache
         parent::__construct($objectManager, $store);
     }
 
-    public function store(FixtureSet $fixtures)
+    public function store(FixtureSetInterface $fixtures)
     {
         $key = $this->getCacheKey($fixtures);
         $filename = $this->store->getPath($key);
         $this->getSqliteBackup()->backup($this->getDatabasePath(), $filename);
     }
-    
-    public function restore(FixtureSet $fixtures)
+
+    public function restore(FixtureSetInterface $fixtures)
     {
         $key = $this->getCacheKey($fixtures);
         if (!$this->store->has($key)) {
             throw new BackupNotFoundException($key);
         }
-        
+
         $backup = $this->store->get($key);
         if ($backup->getCreated() < $fixtures->getLastModified()) {
             throw new BackupOutOfDateException($key);
         }
-        
+
         $this->getSqliteBackup()->restore(
             $this->getDatabasePath(),
             $backup->getFilename()
         );
     }
-    
-    protected function getCacheKey(FixtureSet $fixtures)
+
+    protected function getCacheKey(FixtureSetInterface $fixtures)
     {
         return parent::getCacheKey($fixtures) . '.db';
     }
@@ -53,7 +53,7 @@ class SqliteCopyCache extends AbstractDoctrineCache
     {
         return new SqliteCopyBackup();
     }
-    
+
     private function getDatabasePath()
     {
         $params = $this->objectManager->getConnection()->getParams();
